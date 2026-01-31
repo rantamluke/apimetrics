@@ -54,6 +54,19 @@
 - [x] Recharts integration
 - [x] Auth context & API client
 
+## ✅ Completed (Day 1 - Session 3)
+
+### Alert System
+- [x] Alert service (Email/Slack)
+- [x] Alert API routes (CRUD)
+- [x] Background job (checks every 5min)
+- [x] Alert types:
+  - Daily budget threshold
+  - Hourly cost spike
+  - Error rate threshold
+- [x] Frontend alert management UI
+- [x] Multi-channel support (Email + Slack webhooks)
+
 ## 🔨 Next Steps
 
 ### Tomorrow (Day 2)
@@ -84,10 +97,10 @@
 
 ---
 
-## 📊 Progress: ~75% MVP Complete
+## 📊 Progress: ~85% MVP Complete
 
-**Time invested:** ~3.5 hours  
-**Lines of code:** ~5,800  
+**Time invested:** ~4.5 hours  
+**Lines of code:** ~7,200  
 **Next session:** Testing & deployment prep
 
 ---
@@ -108,9 +121,9 @@
 ### User Experience
 - [x] Zero-friction SDK setup
 - [x] API key management
-- [ ] Beautiful dashboard
-- [ ] Email alerts
-- [ ] Onboarding flow
+- [x] Beautiful dashboard
+- [x] Email/Slack alerts
+- [ ] Onboarding flow (optional)
 
 ### Technical
 - [x] Database schema
