@@ -9,7 +9,9 @@ import dotenv from 'dotenv';
 import { trackRouter } from './routes/track';
 import { analyticsRouter } from './routes/analytics';
 import { authRouter } from './routes/auth';
+import { alertsRouter } from './routes/alerts';
 import { errorHandler } from './middleware/errorHandler';
+import { checkAllAlerts } from './services/alerts';
 
 dotenv.config();
 
@@ -30,6 +32,7 @@ app.get('/health', (req, res) => {
 app.use('/v1/auth', authRouter);
 app.use('/v1/track', trackRouter);
 app.use('/v1/analytics', analyticsRouter);
+app.use('/v1/alerts', alertsRouter);
 
 // Error handler
 app.use(errorHandler);
@@ -38,3 +41,11 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`🚀 APImetrics backend running on port ${PORT}`);
 });
+
+// Start alert checker (every 5 minutes)
+setInterval(() => {
+  checkAllAlerts().catch(console.error);
+}, 5 * 60 * 1000);
+
+// Run once on startup
+checkAllAlerts().catch(console.error);

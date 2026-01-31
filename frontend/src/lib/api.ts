@@ -106,6 +106,31 @@ class APIClient {
     const { data } = await this.client.get('/v1/analytics/recommendations');
     return data.recommendations;
   }
+
+  // Alerts
+  async getAlerts() {
+    const { data } = await this.client.get('/v1/alerts');
+    return data.alerts;
+  }
+
+  async createAlert(alert: {
+    name: string;
+    type: string;
+    threshold: number;
+    channels: any[];
+  }) {
+    const { data } = await this.client.post('/v1/alerts', alert);
+    return data.alert;
+  }
+
+  async updateAlert(id: string, updates: any) {
+    const { data } = await this.client.patch(`/v1/alerts/${id}`, updates);
+    return data.alert;
+  }
+
+  async deleteAlert(id: string) {
+    await this.client.delete(`/v1/alerts/${id}`);
+  }
 }
 
 export const api = new APIClient();

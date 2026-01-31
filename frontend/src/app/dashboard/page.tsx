@@ -93,6 +93,18 @@ export default function Dashboard() {
               <option value={30}>Last 30 days</option>
             </select>
             <button
+              onClick={() => router.push('/alerts')}
+              className="btn btn-secondary"
+            >
+              🔔 Alerts
+            </button>
+            <button
+              onClick={() => router.push('/settings')}
+              className="btn btn-secondary"
+            >
+              Settings
+            </button>
+            <button
               onClick={logout}
               className="btn btn-secondary"
             >
