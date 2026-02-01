@@ -38,7 +38,7 @@ app.use('/v1/alerts', alertsRouter);
 app.use(errorHandler);
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 APImetrics backend running on port ${PORT}`);
 });
 
