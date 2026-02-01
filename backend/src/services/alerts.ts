@@ -4,6 +4,7 @@
 
 import axios from 'axios';
 import { db } from '../db';
+import { sendAlert } from './email';
 
 export interface Alert {
   id: string;
@@ -162,7 +163,7 @@ async function getAlertDetails(alert: Alert): Promise<any> {
 }
 
 /**
- * Send email alert (stub - needs email service like SendGrid/Resend)
+ * Send email alert via SendGrid
  */
 async function sendEmailAlert(
   email: string,
@@ -171,14 +172,50 @@ async function sendEmailAlert(
 ): Promise<void> {
   console.log(`📧 Sending email alert to ${email}`);
   
-  // TODO: Integrate with email service (SendGrid, Resend, etc.)
-  // For now, just log
+  const { total_cost, total_calls, errors } = details;
   
-  const subject = `🚨 APImetrics Alert: ${alert.name}`;
-  const body = formatAlertMessage(alert, details);
-  
-  console.log(`Subject: ${subject}`);
-  console.log(`Body: ${body}`);
+  try {
+    if (alert.type === 'daily_budget') {
+      await sendAlert({
+        to: email,
+        subject: `Budget Alert: $${parseFloat(total_cost).toFixed(2)}`,
+        type: 'budget_exceeded',
+        data: {
+          threshold: alert.threshold,
+          actual: parseFloat(total_cost),
+          timeRange: 'daily',
+          projectName: alert.name,
+        },
+      });
+    } else if (alert.type === 'hourly_spike') {
+      await sendAlert({
+        to: email,
+        subject: `Cost Spike: $${parseFloat(total_cost).toFixed(2)}`,
+        type: 'cost_spike',
+        data: {
+          actual: parseFloat(total_cost),
+          timeRange: 'hourly',
+          projectName: alert.name,
+        },
+      });
+    } else if (alert.type === 'error_rate') {
+      const errorRate = total_calls > 0 ? (errors / total_calls) * 100 : 0;
+      await sendAlert({
+        to: email,
+        subject: `Error Rate Alert: ${errorRate.toFixed(1)}%`,
+        type: 'error_rate',
+        data: {
+          threshold: alert.threshold,
+          actual: errorRate,
+          timeRange: 'hourly',
+          projectName: alert.name,
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Failed to send email alert:', error);
+    throw error;
+  }
 }
 
 /**
