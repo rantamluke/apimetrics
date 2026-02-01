@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install ALL dependencies (including devDependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -20,10 +20,12 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy built files and node_modules from builder
+# Copy package files and install only production deps
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy built files from builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
