@@ -187,7 +187,9 @@ export default function Settings() {
           <p className="text-sm text-gray-600 mb-4">
             Install the SDK and start tracking:
           </p>
-          <pre className="bg-gray-900 text-green-400 p-4 rounded-lg text-sm overflow-x-auto">
+          
+          <h3 className="font-semibold mb-2">OpenAI</h3>
+          <pre className="bg-gray-900 text-green-400 p-4 rounded-lg text-sm overflow-x-auto mb-6">
 {`npm install @apimetrics/sdk
 
 import { APImetricsClient, OpenAIWrapper } from '@apimetrics/sdk';
@@ -204,6 +206,29 @@ const openai = new OpenAIWrapper(
 // Use normally - costs tracked automatically!
 const response = await openai.chat.completions.create({
   model: 'gpt-4o',
+  messages: [{ role: 'user', content: 'Hello!' }]
+});`}
+          </pre>
+
+          <h3 className="font-semibold mb-2">Anthropic</h3>
+          <pre className="bg-gray-900 text-green-400 p-4 rounded-lg text-sm overflow-x-auto">
+{`npm install @apimetrics/sdk
+
+import { APImetricsClient, AnthropicWrapper } from '@apimetrics/sdk';
+
+const tracker = new APImetricsClient({
+  apiKey: 'your-api-key-here'
+});
+
+const anthropic = new AnthropicWrapper(
+  { apiKey: process.env.ANTHROPIC_API_KEY },
+  tracker
+);
+
+// Use normally - costs tracked automatically!
+const response = await anthropic.messages.create({
+  model: 'claude-sonnet-4',
+  max_tokens: 1024,
   messages: [{ role: 'user', content: 'Hello!' }]
 });`}
           </pre>
